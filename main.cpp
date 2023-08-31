@@ -32,35 +32,13 @@ void CarryEnableHalfAdderTest(string A, string B, string E);
 //---main----------------------------------------------------------------------
 int main()
 {
-    TestDriver t = TestDriver();
-    t.TestCircuit3("Unknown circuit", t.NewCircuit());
+    TestDriver T = TestDriver();
 
-    /*
-    HalfAdderTest("0", "0");
-    HalfAdderTest("0", "1");
-    HalfAdderTest("1", "0");
-    HalfAdderTest("1", "1");
+    auto CircuitInfo = T.NewCircuit();
 
-    FullAdderTest("0", "0", "0");
-    FullAdderTest("0", "1", "0");
-    FullAdderTest("1", "0", "0");
-    FullAdderTest("1", "1", "0");
-    FullAdderTest("0", "0", "1");
-    FullAdderTest("0", "1", "1");
-    FullAdderTest("1", "0", "1");
-    FullAdderTest("1", "1", "1");
-
-    for (int i = 0; i < 8; i++){
-        for (int j = 0; j < 8; j++){
-            ThreeBitAdderTest(bitset<3>(i).to_string(), bitset<3>(j).to_string());
-        }
-    }
-
-    CarryEnableHalfAdderTest("1", "0", "0");
-    CarryEnableHalfAdderTest("0", "1", "0");
-    CarryEnableHalfAdderTest("0", "0", "0");
-    CarryEnableHalfAdderTest("1", "1", "0");
-    */
+    T.TestCircuit3(CircuitInfo);
+    
+    delete(CircuitInfo.second);
 
     return 0;
 }

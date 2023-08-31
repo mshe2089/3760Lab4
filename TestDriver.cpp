@@ -11,8 +11,9 @@
 #include <bitset>
 #include <cmath>
 
-CLogic* TestDriver::NewCircuit () {
-  
+std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
+    
+    std::string CircuitName = "Unknown circuit";
     CCircuit* Circuit = new CCircuit();
 
     while(true)
@@ -108,13 +109,13 @@ CLogic* TestDriver::NewCircuit () {
             Circuit->MapInput(WireName);
         }
         
-            // TODO: add whatever other commands you need
-        
-            else if( Request.compare( "end" ) == 0 )
+        else if( Request.compare( "end" ) == 0 )
         {
+            std::cin >> CircuitName;
             break; // end of file
         }
-            else
+
+        else
         {
             std::cout << "Unrecognised command " << Request << std::endl;
             std::cout << "Continuing to next line" << std::endl;
@@ -124,14 +125,14 @@ CLogic* TestDriver::NewCircuit () {
         }
     }
 
-    return Circuit;
+    return std::make_pair(CircuitName, Circuit);
 }
 
-void TestDriver::TestCircuit3 (std::string Name, CLogic* Circuit)
+void TestDriver::TestCircuit3 (std::pair<std::string, CLogic*> CircuitInfo)
 {
     for (int i = 0; i < pow(2, 3); i++)
     {
-        TestInput(Name, Circuit, std::bitset<3>(i).to_string());
+        TestInput(CircuitInfo.first, CircuitInfo.second, std::bitset<3>(i).to_string());
     }
 }
 

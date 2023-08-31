@@ -8,9 +8,9 @@
 class TestDriver
 {
   public:
-    CLogic* NewCircuit ();
+    std::pair<std::string, CLogic*>  NewCircuit ();
 
-    void TestCircuit3 (std::string Name, CLogic* Circuit);
+    void TestCircuit3 (std::pair<std::string, CLogic*> CircuitInfo);
 
   private:
     void TestInput (std::string Name, CLogic* Circuit, std::string Input);

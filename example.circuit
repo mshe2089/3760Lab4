@@ -16,4 +16,4 @@
  testerInput inWireB
  testerInput inWireC
 
- end
+ end HalfAdder

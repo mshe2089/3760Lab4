@@ -1,53 +1,51 @@
 #include "CCircuit.h"
 
 //---CCircuit Implementation--------------------------------------------------
-CCircuit::CCircuit(int nInputs, int nOutputs, int nLogics, int nWires) : CLogic(nInputs, nOutputs)
-{
-    nLogics = nLogics;     
-    nWires = nWires;
-
-    mLogics = std::vector<CLogic*>(nLogics);
-    for (int i = 0; i < nWires; i++) mWires.push_back(new CWire());
-}
+CCircuit::CCircuit(int nInputs, int nOutputs) : CLogic(nInputs, nOutputs){}
 
 CCircuit::~CCircuit()
 {
-    for (CWire* w : mWires) delete w;
-    for (CLogic* l : mLogics) delete l;
+    for (std::pair<std::string, CWire*> p : mWires) delete p.second;
+    for (std::pair<std::string, CLogic*> p : mLogics) delete p.second;
 }
 
-void CCircuit::ConnectWireToLogic(int wire, int logic, int input)
+void CCircuit::ConnectWireToLogic(std::string wire, std::string logic, int input)
 {
     mWires[wire]->AddOutputConnection(mLogics[logic], input);
 }
 
-void CCircuit::ConnectLogicToWire(int logic, int output, int wire)
+void CCircuit::ConnectLogicToWire(std::string logic, int output, std::string wire)
 {
     mLogics[logic]->ConnectOutput(output, mWires[wire]);
 }
 
-void CCircuit::SetLogic(int logic, CLogic* clogic)
+void CCircuit::AddLogic(std::string logic, CLogic* clogic)
 {
     mLogics[logic] = clogic;
 }
 
-void CCircuit::MapInput(int circuitInput, int wire)
+void CCircuit::AddWire(std::string wire)
+{
+    mWires[wire] = new CWire();
+}
+
+void CCircuit::MapInput(int circuitInput, std::string wire)
 {
     inputMap.push_back(std::make_tuple(circuitInput, wire));
 }
 
-void CCircuit::MapOutput(int logic, int logicOutput, int circuitOutput)
+void CCircuit::MapOutput(std::string logic, int logicOutput, int circuitOutput)
 {
     outputMap.push_back(std::make_tuple(logic, logicOutput, circuitOutput));
 }
 
 void CCircuit::ComputeOutput()
 {
-    for (std::tuple<int, int> t : inputMap){
+    for (std::tuple<int, std::string> t : inputMap){
         mWires[std::get<1>(t)]->DriveLevel(mInputs[std::get<0>(t)]);
     }
 
-    for (std::tuple<int, int, int> t : outputMap){
+    for (std::tuple<std::string, int, int> t : outputMap){
         eLogicLevel output = mLogics[std::get<0>(t)]->GetOutputState(std::get<1>(t));
         mOutputs[std::get<2>(t)] = output;
         if (mpOutputConnections[std::get<2>(t)] != NULL) mpOutputConnections[std::get<2>(t)]->DriveLevel(output);

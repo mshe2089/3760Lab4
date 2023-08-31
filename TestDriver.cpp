@@ -1,9 +1,12 @@
 #include "TestDriver.h"
+#include "CANDGate.h"
+#include "CORGate.h"
+#include "CXORGate.h"
+#include "CCircuit.h"
 
 #include <utility>        // std::pair
 #include <vector>
 #include <iostream>
-#include <fstream>
 #include <string>
 
 using namespace std;
@@ -62,25 +65,25 @@ void TestDriver::NewCircuit () {
 // remove the comment markers // and leading whitespace on each line:
 //
 //  # A 3-gate test circuit
-//
+
 //  component xor myXor0
 //  component and myAnd0
 //  component and myAnd1
-//
+
 //  wire myXor0 0 inwireA
 //  wire myXor0 1 inwireB
 //  wire myAnd0 1 inwireC
-//
+
 //  connect myXor0 myAnd0 0
 //  connect inWireA myAnd1 0
 //  connect inWireB myAnd1 0
-//
+
 //  testerOutput myAnd0 0
 //  testerOutput myAnd1 0
 //  testerInput inWireA
 //  testerInput inWireB
 //  testerInput inWireC
-//
+
 //  end
 //
 // Compile this program, then run it with a command line of the form

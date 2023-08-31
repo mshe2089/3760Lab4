@@ -12,6 +12,10 @@ public:
     CORGate();
 
 private:
+
+    static const int nInputs = 2; // number of inputs per nand gate
+    static const int nOutputs = 1; // maximum fanout: max gate inputs that one gate output can drive 
+    
     // ComputeOutput contains OR logic and drives the output wire if it exists
     void ComputeOutput();
 };

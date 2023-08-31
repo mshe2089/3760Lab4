@@ -1,7 +1,7 @@
 #include "CCircuit.h"
 
 //---CCircuit Implementation--------------------------------------------------
-CCircuit::CCircuit(int nInputs, int nOutputs) : CLogic(nInputs, nOutputs){}
+CCircuit::CCircuit() : CLogic(){}
 
 CCircuit::~CCircuit()
 {
@@ -21,33 +21,64 @@ void CCircuit::ConnectLogicToWire(std::string logic, int output, std::string wir
 
 void CCircuit::AddLogic(std::string logic, CLogic* clogic)
 {
-    mLogics[logic] = clogic;
+    if (mLogics.find(logic) == mLogics.end()) 
+    {
+        mLogics[logic] = clogic;
+    }
 }
 
 void CCircuit::AddWire(std::string wire)
 {
-    mWires[wire] = new CWire();
+    if (mWires.find(wire) == mWires.end()) 
+    {
+        mWires[wire] = new CWire();
+    }
 }
 
-void CCircuit::MapInput(int circuitInput, std::string wire)
+void CCircuit::MapInput(std::string wire, int circuitInput)
 {
-    inputMap.push_back(std::make_tuple(circuitInput, wire));
+    circuitInput = circuitInput < 0 ? int(mInputs.size()) : circuitInput;
+
+    while(int(mInputs.size()) < circuitInput + 1){
+        mInputs.push_back(LOGIC_UNDEFINED);
+    }
+
+    inputMap.push_back(std::make_tuple(
+        circuitInput, 
+        wire
+        ));
 }
 
 void CCircuit::MapOutput(std::string logic, int logicOutput, int circuitOutput)
 {
-    outputMap.push_back(std::make_tuple(logic, logicOutput, circuitOutput));
+    circuitOutput = circuitOutput < 0 ? int(mOutputs.size()) : circuitOutput;
+
+    while(int(mOutputs.size()) < circuitOutput + 1){
+        mOutputs.push_back(LOGIC_UNDEFINED);
+        mpOutputConnections.push_back(NULL);
+    }
+
+    outputMap.push_back(std::make_tuple(
+        logic, 
+        logicOutput, 
+        circuitOutput
+        ));
 }
 
 void CCircuit::ComputeOutput()
 {
-    for (std::tuple<int, std::string> t : inputMap){
+    for (std::tuple<int, std::string> t : inputMap)
+    {
         mWires[std::get<1>(t)]->DriveLevel(mInputs[std::get<0>(t)]);
     }
-
-    for (std::tuple<std::string, int, int> t : outputMap){
+    
+    for (std::tuple<std::string, int, int> t : outputMap)
+    {
         eLogicLevel output = mLogics[std::get<0>(t)]->GetOutputState(std::get<1>(t));
         mOutputs[std::get<2>(t)] = output;
-        if (mpOutputConnections[std::get<2>(t)] != NULL) mpOutputConnections[std::get<2>(t)]->DriveLevel(output);
+        if (mpOutputConnections[std::get<2>(t)] != NULL)
+        {
+            mpOutputConnections[std::get<2>(t)]->DriveLevel(output);
+        }
     }
 }

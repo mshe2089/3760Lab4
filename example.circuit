@@ -2,18 +2,16 @@
 
  component xor myXor0
  component and myAnd0
- component and myAnd1
 
- wire myXor0 0 inwireA
- wire myXor0 1 inwireB
- wire myAnd0 1 inwireC
+ wire inWireA 0 myXor0
+ wire inWireB 1 myXor0 
+ wire inWireC 1 myAnd0
+ wire inWireD 0 myAnd0
 
- connect myXor0 myAnd0 0
- connect inWireA myAnd1 0
- connect inWireB myAnd1 0
+ connect myXor0 0 inWireD
 
  testerOutput myAnd0 0
- testerOutput myAnd1 0
+
  testerInput inWireA
  testerInput inWireB
  testerInput inWireC

@@ -1,10 +1,17 @@
 #include "CXORGate.h"
 
 //---CXORGate Implementation--------------------------------------------------
-CXORGate::CXORGate() : CLogic(2, 1)
+CXORGate::CXORGate() : CLogic()
 {
-    mInputs[0] = mInputs[1] = LOGIC_UNDEFINED;
-    mpOutputConnections[0] = NULL;
+    for(int i = 0; i < nOutputs; i++)
+    {
+        mOutputs.push_back(LOGIC_UNDEFINED);
+        mpOutputConnections.push_back(NULL);
+    }
+    for(int i = 0; i < nInputs; i++)
+    {
+        mInputs.push_back(LOGIC_UNDEFINED);
+    }
     ComputeOutput();
 }
 

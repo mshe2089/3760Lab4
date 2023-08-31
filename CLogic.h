@@ -11,7 +11,7 @@ class CLogic
 {
   public:
     // Constructor destructor
-    CLogic(int nInputs, int nOutputs);
+    CLogic();
     virtual ~CLogic();
 
     // ConnectOutput connects this gate's output to wire {apOutputConnection}
@@ -24,6 +24,10 @@ class CLogic
 
     // GetOutputState returns the current output level of this gate
     eLogicLevel GetOutputState(int aOutputIndex);
+
+    int InputSize();
+
+    int OutputSize();
 
   protected:
     // ComputeOutput is a virtual function implemented by subclasses depending on their logic.

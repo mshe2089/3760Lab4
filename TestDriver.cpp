@@ -8,89 +8,161 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include <bitset>
+#include <cmath>
 
-using namespace std;
+CLogic* TestDriver::NewCircuit () {
+  
+    CCircuit* Circuit = new CCircuit();
 
-void TestDriver::NewCircuit () {
-  while(true)
-  {
-    std::string Request;
-    std::cin >> Request;  // get the next word from the input stream
-    std::cout << "Processing input token: " << Request << std::endl;
-    
-    if( Request[0] == '#' )
+    while(true)
     {
-      // a comment line
-      // get the rest of the line and ignore it
-      std::string DummyVar;
-      getline( std::cin, DummyVar );
-    }
-    else if( Request.compare( "component" ) == 0 )
-    {
-      std::string GateType;
-      std::string GateName;
-      std::cin >> GateType;
-      std::cin >> GateName;
-      std::cout << "Adding gate of type " << GateType << " named " << GateName << std::endl;
-      // TODO : add the gate
-    }
-    else if( Request.compare( "wire" ) == 0 )
-    {
-    
-      // TODO: implement wire command
-    
-    }
-    
-    // TODO: add whatever other commands you need
-    
-    else if( Request.compare( "end" ) == 0 )
-    {
-      break; // end of file
-    }
-    else
-    {
-      std::cout << "Unrecognised command " << Request << std::endl;
-      std::cout << "Continuing to next line" << std::endl;
-      // get the rest of the line and ignore it
-      std::string DummyVar;
-      getline( std::cin, DummyVar );
-    }
-  }
+        std::string Request;
+        std::cin >> Request;  // get the next word from the input stream
+        std::cout << "Processing input token: " << Request << std::endl;
+        
+        if( Request[0] == '#' )
+        {
+            // a comment line
+            // get the rest of the line and ignore it
+            std::string DummyVar;
+            getline( std::cin, DummyVar );
+        }
+        else if( Request.compare( "component" ) == 0 )
+        {
+            std::string GateType;
+            std::string GateName;
+            std::cin >> GateType;
+            std::cin >> GateName;
+            std::cout << "Adding gate of type " << GateType << " named " << GateName << std::endl;
+            // TODO : add the gate
+            CLogic* Gate;
+            if (GateType.compare( "or" ) == 0)
+            {
+                Gate = new CORGate();
+            }
+            else if (GateType.compare( "and" ) == 0)
+            {
+                Gate = new CANDGate();
+            }
+            else if (GateType.compare( "xor" ) == 0)
+            {
+                Gate = new CXORGate();
+            }
+            else 
+            {
+                std::cout << "Unrecognised gate " << GateType << std::endl;
+                std::cout << "Continuing to next line" << std::endl;
+                // get the rest of the line and ignore it
+                std::string DummyVar;
+                getline( std::cin, DummyVar );
+                continue;
+            }
 
-  return;
+            Circuit->AddLogic(GateName, Gate);
+        }
+
+        else if( Request.compare( "wire" ) == 0 )
+        {
+            std::string GateName;
+            std::string Input;
+            std::string WireName;
+
+            std::cin >> WireName;
+            std::cin >> Input;
+            std::cin >> GateName;
+            
+            Circuit->AddWire(WireName);
+            Circuit->ConnectWireToLogic(WireName, GateName, stoi(Input));
+        }
+
+        else if( Request.compare( "connect" ) == 0 )
+        {
+            std::string GateName;
+            std::string Output;
+            std::string WireName;
+
+            std::cin >> GateName;
+            std::cin >> Output;
+            std::cin >> WireName;
+        
+            Circuit->ConnectLogicToWire(GateName, stoi(Output), WireName);
+        }
+
+        else if( Request.compare( "testerOutput" ) == 0 )
+        {
+            std::string GateName;
+            std::string Output;
+
+            std::cin >> GateName;
+            std::cin >> Output;
+        
+            Circuit->MapOutput(GateName, stoi(Output));
+        }
+
+        else if( Request.compare( "testerInput" ) == 0 )
+        {
+            std::string WireName;
+            std::cin >> WireName;
+        
+            Circuit->MapInput(WireName);
+        }
+        
+            // TODO: add whatever other commands you need
+        
+            else if( Request.compare( "end" ) == 0 )
+        {
+            break; // end of file
+        }
+            else
+        {
+            std::cout << "Unrecognised command " << Request << std::endl;
+            std::cout << "Continuing to next line" << std::endl;
+            // get the rest of the line and ignore it
+            std::string DummyVar;
+            getline( std::cin, DummyVar );
+        }
+    }
+
+    return Circuit;
 }
-// This is a demonstration of using linux piping to read from files.
-//
-// To run it, first copy the following text into an appropriately named file, e.g. testCircuit.txt, being sure to
-// remove the comment markers // and leading whitespace on each line:
-//
-//  # A 3-gate test circuit
 
-//  component xor myXor0
-//  component and myAnd0
-//  component and myAnd1
+void TestDriver::TestCircuit3 (std::string Name, CLogic* Circuit)
+{
+    for (int i = 0; i < pow(2, 3); i++)
+    {
+        TestInput(Name, Circuit, std::bitset<3>(i).to_string());
+    }
+}
 
-//  wire myXor0 0 inwireA
-//  wire myXor0 1 inwireB
-//  wire myAnd0 1 inwireC
+void TestDriver::TestInput (std::string Name, CLogic* Circuit, std::string Input){
+    
+    std::string Output;
+    const std::size_t InputWidth = Circuit->InputSize();
+    const std::size_t OutputWidth = Circuit->OutputSize();
+        
+    for (int j = 0; j < int(InputWidth); j++){
+        Circuit->DriveInput(j, (Input[j] == '1') ? LOGIC_HIGH : LOGIC_LOW);
+    }
 
-//  connect myXor0 myAnd0 0
-//  connect inWireA myAnd1 0
-//  connect inWireB myAnd1 0
+    Output = "";
+    for (int j = 0; j < int(OutputWidth); j++){
+        if (Circuit->GetOutputState(j) == LOGIC_HIGH) 
+        {
+            Output.push_back('1');
+        }
+        else if (Circuit->GetOutputState(j) == LOGIC_LOW) 
+        {
+            Output.push_back('0');
+        }
+        else {
+            Output.push_back('Z');
+        }
+    }
 
-//  testerOutput myAnd0 0
-//  testerOutput myAnd1 0
-//  testerInput inWireA
-//  testerInput inWireB
-//  testerInput inWireC
-
-//  end
-//
-// Compile this program, then run it with a command line of the form
-//
-// a.out < testCircuit.txt
-//
-// to pipe the contents of testCircuit.txt into the program.
-//
-// Copyright (c) Donald Dansereau, 2023
-
+    std::cout << "[" << Name << "]"
+                << " Input: " << Input
+                << " >>> "
+                << " Output: " << Output
+                << std::endl;
+}

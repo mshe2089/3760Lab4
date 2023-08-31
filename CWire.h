@@ -34,7 +34,6 @@ class CWire
     void DriveLevel(eLogicLevel aNewLevel);
 
   private:
-    static const int InputsPerGate = 2; // number of inputs per nand gate
     static const int MaxFanout = 2;     // maximum fanout: max gate inputs that one gate output can drive 
 
     int mNumOutputConnections;            // how many outputs are connected

@@ -33,8 +33,7 @@ void CarryEnableHalfAdderTest(string A, string B, string E);
 int main()
 {
     TestDriver t = TestDriver();
-    t.NewCircuit();
-
+    t.TestCircuit3("Unknown circuit", t.NewCircuit());
 
     /*
     HalfAdderTest("0", "0");

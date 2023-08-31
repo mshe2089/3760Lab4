@@ -15,7 +15,7 @@ class CCircuit: public CLogic
 public:
     // Constructor, Destructor
     // Circuit will contain {nInputs} inputs, {nOutputs} outputs, {nLogics} logic elements and {nWires} wires
-    CCircuit(int nInputs, int nOutputs);
+    CCircuit();
     ~CCircuit();
 
     // Connect wire {wire} to input {input} of logic element {logic}
@@ -31,10 +31,10 @@ public:
     void AddWire(std::string wire);
 
     // Connect the circuit input {circuitInput} to wire {wire}
-    void MapInput(int circuitInput, std::string wire);
+    void MapInput(std::string wire, int circuitInput = -1);
 
     // Connect output {logicOutput} of logic element {logic} to circuit output {circuitOutput}
-    void MapOutput(std::string logic, int logicOutput, int circuitOutput);
+    void MapOutput(std::string logic, int logicOutput, int circuitOutput = -1);
 
 private:
     // ComputeOutput executes circuit logic and drives connected output wires if any exist

@@ -1,4 +1,4 @@
- # A 3-gate test circuit
+ # Half adder circuit
 
  component xor myXor0
  component and myAnd0

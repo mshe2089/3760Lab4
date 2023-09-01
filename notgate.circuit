@@ -1,0 +1,11 @@
+ # Not gate
+
+ component not myNot
+
+ wire inWire 0 myNot
+
+ testerOutput myNot 0
+
+ testerInput inWire
+
+ end NotGate

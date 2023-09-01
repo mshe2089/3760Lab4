@@ -2,6 +2,7 @@
 #include "CANDGate.h"
 #include "CORGate.h"
 #include "CXORGate.h"
+#include "CNOTGate.h"
 #include "CCircuit.h"
 
 #include <utility>        // std::pair
@@ -49,6 +50,10 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
             else if (GateType.compare( "xor" ) == 0)
             {
                 Gate = new CXORGate();
+            }
+            else if (GateType.compare( "not" ) == 0)
+            {
+                Gate = new CNOTGate();
             }
             else 
             {
@@ -126,6 +131,14 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
     }
 
     return std::make_pair(CircuitName, Circuit);
+}
+
+void TestDriver::TestCircuit2 (std::pair<std::string, CLogic*> CircuitInfo)
+{
+    for (int i = 0; i < pow(2, 2); i++)
+    {
+        TestInput(CircuitInfo.first, CircuitInfo.second, std::bitset<2>(i).to_string());
+    }
 }
 
 void TestDriver::TestCircuit3 (std::pair<std::string, CLogic*> CircuitInfo)

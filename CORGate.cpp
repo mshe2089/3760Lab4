@@ -3,15 +3,9 @@
 //---CORGate Implementation--------------------------------------------------
 CORGate::CORGate() : CLogic()
 {
-    for(int i = 0; i < nOutputs; i++)
-    {
-        mOutputs.push_back(LOGIC_UNDEFINED);
-        mpOutputConnections.push_back(NULL);
-    }
-    for(int i = 0; i < nInputs; i++)
-    {
-        mInputs.push_back(LOGIC_UNDEFINED);
-    }
+    mInputs = std::vector<eLogicLevel>(nInputs, LOGIC_UNDEFINED);
+    mOutputs = std::vector<eLogicLevel>(nOutputs, LOGIC_UNDEFINED);
+    mpOutputConnections = std::vector<CWire*>(nOutputs, NULL);
     ComputeOutput();
 }
 

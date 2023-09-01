@@ -1,7 +1,7 @@
-#include "CANDGate.h"
+#include "CNOTGate.h"
 
-//---CANDGate Implementation--------------------------------------------------
-CANDGate::CANDGate() : CLogic()
+//---CNOTGate Implementation--------------------------------------------------
+CNOTGate::CNOTGate() : CLogic()
 {
     mInputs = std::vector<eLogicLevel>(nInputs, LOGIC_UNDEFINED);
     mOutputs = std::vector<eLogicLevel>(nOutputs, LOGIC_UNDEFINED);
@@ -9,16 +9,16 @@ CANDGate::CANDGate() : CLogic()
     ComputeOutput();
 }
 
-void CANDGate::ComputeOutput()
+void CNOTGate::ComputeOutput()
 {
-    // AND logic
-    if (mInputs[0] == LOGIC_UNDEFINED || mInputs[1] == LOGIC_UNDEFINED)
+    // NOT logic
+    if (mInputs[0] == LOGIC_UNDEFINED)
     {
         mOutputs[0] = LOGIC_UNDEFINED;
     }
     else 
     {
-        mOutputs[0] = (mInputs[0] == LOGIC_HIGH && mInputs[1] == LOGIC_HIGH) ? LOGIC_HIGH : LOGIC_LOW;
+        mOutputs[0] = (mInputs[0] == LOGIC_HIGH) ? LOGIC_LOW : LOGIC_HIGH;
     }
     // Drive output
     if (mpOutputConnections[0] != NULL) mpOutputConnections[0]->DriveLevel(mOutputs[0]);

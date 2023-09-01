@@ -10,7 +10,8 @@
 #include <string>
 
 //---CCircuit Declaration-------------------------------------------------------
-// Subclass of CLogic, providing functionality to build combinatorial circuits using CCircuit or CGate objects.
+// Subclass of CLogic, providing functionality to build combinatorial circuits using CCircuit or 
+// CGate objects.
 class CCircuit: public CLogic
 {
 public:

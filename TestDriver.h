@@ -17,31 +17,35 @@
 //
 // CGates and CCircuit implement CLogic.
 // CGates simulate simple logic gates with hard coded behaviour.
-// CCircuits simulate complex combinatorial circuits, containing any number of CCircuits and CGates connected together.
+// CCircuits simulate complex combinatorial circuits, containing any number of CCircuits and CGates
+// connected together.
 //
 // Circuit accepts CLCs defined by .circuit files, piped directly into the executable.
 // Each .circuit file shall define only one CLC.
 // Syntax:
 //                  Command                        |                Definition
-//    _____________________________________________|________________________________________________________
+//    _____________________________________________|_______________________________________________
 //
 //      component {gateType} {gateName}               > "component" declares new component of type 
-//                                                       {gateType}[and, or, xor, not] and name {gateName}
+//                                                       {gateType}[and, or, xor, not] and name 
+//                                                       {gateName}
 //
-//      wire {wireName} {inputNo} {gateName}          > "wire" declares new wire {wireName} if it doesnt exist
-//                                                        and connects it to input {inputNo} of gate {gateName}    
+//      wire {wireName} {inputNo} {gateName}          > "wire" declares new wire {wireName} if it 
+//                                                        doesnt exist and connects it to input 
+//                                                        {inputNo} of gate {gateName}    
 //
 //      connect {gateName} {outputNo} {wireName}      > "connect" connects output {inputNo} of gate
 //                                                        {gateName} to wire {wireName}
 //
-//      testerOutput {gateName} {outputNo}            > "testerOutput" adds output {inputNo} of gate
-//                                                        {gateName} as an output of the whole circuit.
+//      testerOutput {gateName} {outputNo}            > "testerOutput" adds output {inputNo} of 
+//                                                        gate {gateName} as an output of the whole 
+//                                                        circuit.
 //
-//      testerInput {wireName} {outputNo}             > "testerInput" adds wire {wireName} as an output 
-//                                                        of the whole circuit.
+//      testerInput {wireName} {outputNo}             > "testerInput" adds wire {wireName} as an 
+//                                                        output of the whole circuit.
 //
-//      end {circuitName}                             > "end" signifies the end of the declaration for
-//                                                        circuit {circuitName}
+//      end {circuitName}                             > "end" signifies the end of the declaration 
+//                                                        for circuit with name {circuitName}
 //
 // Copyright (c) Daniel Shen 2023
 
@@ -56,12 +60,12 @@ class TestDriver
     std::pair<std::string, CLogic*>  NewCircuit ();
 
     /**
-     * Generates truth table for a circuit. Recursively finds all possible assignments.
+     * Prints truth table for a circuit. Recursively finds all possible assignments.
      * 
      * @param CircuitInfo pair containing circuit name and circuit object pointer
      * @param Input empty non-const string buffer used in recursion. 
-     *              Initialize an empty string and pass as this argument when calling.
-     * @param i integer argument used in recursion. When calling, you don't have to provide this.
+     *              Initialize empty string to a variable and pass as this argument when calling.
+     * @param i integer argument used in recursion. Don't provide this when calling.
     */
     void TestCircuit (std::pair<std::string, CLogic*> &CircuitInfo, std::string &Input, int i = 0);
 

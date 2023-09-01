@@ -147,7 +147,37 @@ void TestDriver::TestCircuit (std::pair<std::string, CLogic*> &CircuitInfo, std:
 {
     if (i >= CircuitInfo.second->InputSize())
     {
-        TestInput(CircuitInfo.first, CircuitInfo.second, Input);
+        std::string Name = CircuitInfo.first;
+        auto Circuit = CircuitInfo.second;
+        const std::size_t InputWidth = Circuit->InputSize();
+        const std::size_t OutputWidth = Circuit->OutputSize();
+
+        // Drive each input with corressponding assignment
+        for (int j = 0; j < int(InputWidth); j++){
+            Circuit->DriveInput(j, (Input[j] == '1') ? LOGIC_HIGH : LOGIC_LOW);
+        }
+
+        // Get all outputs and print 
+        std::string Output = "";
+        for (int j = 0; j < int(OutputWidth); j++){
+            if (Circuit->GetOutputState(j) == LOGIC_HIGH) 
+            {
+                Output.push_back('1');
+            }
+            else if (Circuit->GetOutputState(j) == LOGIC_LOW) 
+            {
+                Output.push_back('0');
+            }
+            else {
+                Output.push_back('Z');
+            }
+        }
+
+        std::cout << "[" << Name << "]"
+                    << " Input: " << Input
+                    << " >>> "
+                    << " Output: " << Output
+                    << std::endl;
     }
     else 
     {
@@ -160,41 +190,5 @@ void TestDriver::TestCircuit (std::pair<std::string, CLogic*> &CircuitInfo, std:
         TestCircuit(CircuitInfo, Input, i+1);
         Input.pop_back();
     }
-    return;
-}
-
-void TestDriver::TestInput (std::string Name, CLogic* Circuit, std::string Input){
-    
-    std::string Output;
-    const std::size_t InputWidth = Circuit->InputSize();
-    const std::size_t OutputWidth = Circuit->OutputSize();
-
-    // Drive each input with corressponding assignment
-    for (int j = 0; j < int(InputWidth); j++){
-        Circuit->DriveInput(j, (Input[j] == '1') ? LOGIC_HIGH : LOGIC_LOW);
-    }
-
-    // Get all outputs and print 
-    Output = "";
-    for (int j = 0; j < int(OutputWidth); j++){
-        if (Circuit->GetOutputState(j) == LOGIC_HIGH) 
-        {
-            Output.push_back('1');
-        }
-        else if (Circuit->GetOutputState(j) == LOGIC_LOW) 
-        {
-            Output.push_back('0');
-        }
-        else {
-            Output.push_back('Z');
-        }
-    }
-
-    std::cout << "[" << Name << "]"
-                << " Input: " << Input
-                << " >>> "
-                << " Output: " << Output
-                << std::endl;
-
     return;
 }

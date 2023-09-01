@@ -1,0 +1,36 @@
+ # A 3-gate test circuit
+
+ component xor myXor0
+ component xor myXor1
+ component and myAnd0
+ component and myAnd1
+ component or myOr0
+
+ wire inWireA 0 myXor0
+ wire inWireA 0 myAnd0
+ wire inWireB 1 myXor0 
+ wire inWireB 1 myAnd0
+ wire inWireC 1 myXor1
+ wire inWireC 1 myAnd1
+ wire WireD 0 myXor1
+ wire WireD 0 myAnd1
+ wire WireE 0 myOr0
+ wire WireF 1 myOr0
+
+ connect myXor0 0 WireD
+ connect myAnd0 0 WireF
+ connect myAnd1 0 WireE
+
+ # Cout
+ testerOutput myOr0 0
+ # S
+ testerOutput myXor1 0
+
+ # A
+ testerInput inWireA
+ # B
+ testerInput inWireB
+ # Cin
+ testerInput inWireC
+
+ end FullAdder

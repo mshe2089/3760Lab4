@@ -1,23 +1,27 @@
 #ifndef _CNOTGATE_H
 #define _CNOTGATE_H
 
+//--Includes-------------------------------------------------------------------
 #include "CLogic.h"
 
-//---CNOTGate Interface-------------------------------------------------------
+//---CNOTGate Declaration-------------------------------------------------------
 // Subclass of CLogic that simulates a NOT gate
 class CNOTGate: public CLogic
 {
 public:
-    // Constructor
+    /**
+     * Constructor
+    */
     CNOTGate();
 
 private:
-
-    static const int nInputs = 1; // number of inputs for a NOT gate
-    static const int nOutputs = 1; // // number of inputs for a NOT gate
-    
-    // ComputeOutput contains NOT logic and drives the output wire if it exists
+    /**
+     * Compute the output levels of this Clogic object
+    */
     void ComputeOutput();
+
+    static const int nInputs = 1;       // number of inputs for a NOT gate
+    static const int nOutputs = 1;      // number of inputs for a NOT gate
 };
 
 #endif

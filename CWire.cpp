@@ -1,3 +1,6 @@
+// See CWire.h
+//
+//--Includes-------------------------------------------------------------------
 #include "CLogic.h"
 #include "CWire.h"
 
@@ -16,6 +19,7 @@ void CWire::AddOutputConnection(CLogic *apGateToDrive, int aGateInputToDrive)
 
 void CWire::DriveLevel(eLogicLevel aNewLevel)
 {
+    // Drive each connected output
     for (int i = 0; i < mNumOutputConnections; ++i)
         mpGatesToDrive[i]->DriveInput(mGateInputIndices[i], aNewLevel);
 }

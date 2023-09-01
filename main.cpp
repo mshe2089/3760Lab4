@@ -1,43 +1,29 @@
-// A combinatorial logic circuit simulator
+// Main
 //
-// Provides classes and methods to build combinatorial circuits. 
-// CLogic is a template of a logic cell: any gate or circuit of gates.
-// CLogic units can be connected with CWires inside CCircuits and driven to get simulated outputs.
-//
-// CGates and CCircuit implement CLogic.
-// CGates simulate simple logic gates with hard coded behaviour.
-// CCircuits simulate complex combinatorial circuits, containing any number of CCircuits and CGates connected together.
+// Calls TestDriver class to test combinatorial logic circuits.
 //
 // Copyright (c) Daniel Shen 2023
 
 //--Includes-------------------------------------------------------------------
 #include "TestDriver.h"
-#include "CANDGate.h"
-#include "CORGate.h"
-#include "CXORGate.h"
-#include "CCircuit.h"
 
+#include <string>
 #include <iostream>
-#include <vector>
-#include <bitset>
 
-using namespace std;
-
-//---Forward Declarations------------------------------------------------------
-void HalfAdderTest(string A, string B);
-void FullAdderTest(string A, string B, string C);
-void ThreeBitAdderTest(string A, string B);
-void CarryEnableHalfAdderTest(string A, string B, string E);
-
-//---main----------------------------------------------------------------------
+//---Main----------------------------------------------------------------------
 int main()
 {
+    // Create new testdriver
     TestDriver T = TestDriver();
 
+    // Create new circuit
     auto CircuitInfo = T.NewCircuit();
 
-    T.TestCircuit3(CircuitInfo);
+    // Test circuit with all assignments
+    std::string Assignment = "";
+    T.TestCircuit(CircuitInfo, Assignment);
     
+    // Delete circuit
     delete(CircuitInfo.second);
 
     return 0;

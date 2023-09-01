@@ -1,3 +1,6 @@
+// See CANDGate.h
+//
+//--Includes-------------------------------------------------------------------
 #include "CANDGate.h"
 
 //---CANDGate Implementation--------------------------------------------------
@@ -16,9 +19,13 @@ void CANDGate::ComputeOutput()
     {
         mOutputs[0] = LOGIC_UNDEFINED;
     }
-    else 
+    else if (mInputs[0] == LOGIC_HIGH && mInputs[1] == LOGIC_HIGH)
     {
-        mOutputs[0] = (mInputs[0] == LOGIC_HIGH && mInputs[1] == LOGIC_HIGH) ? LOGIC_HIGH : LOGIC_LOW;
+        mOutputs[0] = LOGIC_HIGH;
+    }
+    else
+    {
+        mOutputs[0] = LOGIC_LOW;
     }
     // Drive output
     if (mpOutputConnections[0] != NULL) mpOutputConnections[0]->DriveLevel(mOutputs[0]);

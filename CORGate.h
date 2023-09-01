@@ -1,23 +1,27 @@
 #ifndef _CORGATE_H
 #define _CORGATE_H
 
+//--Includes-------------------------------------------------------------------
 #include "CLogic.h"
 
-//---CORGate Interface-------------------------------------------------------
+//---CORGate Declaration-------------------------------------------------------
 // Subclass of CLogic that simulates an OR gate
 class CORGate: public CLogic
 {
 public:
-    // Constructor
+    /**
+     * Constructor
+    */
     CORGate();
 
 private:
-
-    static const int nInputs = 2; // number of inputs per nand gate
-    static const int nOutputs = 1; // maximum fanout: max gate inputs that one gate output can drive 
-    
-    // ComputeOutput contains OR logic and drives the output wire if it exists
+    /**
+     * Compute the output levels of this Clogic object
+    */
     void ComputeOutput();
+
+    static const int nInputs = 2;       // number of inputs for a OR gate
+    static const int nOutputs = 1;      // number of outputs for a OR gate
 };
 
 

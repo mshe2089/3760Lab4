@@ -1,37 +1,70 @@
 #ifndef _CLOGIC_H
 #define _CLOGIC_H
 
+//--Includes-------------------------------------------------------------------
 #include "CWire.h"
 
 #include <vector>
 
-//---Logic Interface-------------------------------------------------------
+//---Logic Declaration-------------------------------------------------------
 // CLogic is a template class used to represent logic cells (i.e. gates or subcircuits)
 class CLogic
 {
   public:
-    // Constructor destructor
+    /**
+     * Constructor
+    */
     CLogic();
+
+    /**
+     * Destructor
+    */
     virtual ~CLogic();
 
-    // ConnectOutput connects this gate's output to wire {apOutputConnection}
-    // That wire will be driven by the gate's output level
+    /**
+     * connect this logic element's output to a wire
+     * 
+     * @param aOutputIndex output number
+     * @param apOutputConnection wire to connect to
+    */
     void ConnectOutput(int aOutputIndex, CWire *apOutputConnection);
 
-    // DriveInput drives the specified input of this gate {aInputIndex}
-    // with the specified level {aNewLevel}
+    /**
+     * drive the specified input of this logic element
+     * 
+     * @param aInputIndex input number
+     * @param aNewLevel level to drive input
+    */
     void DriveInput(int aInputIndex, eLogicLevel aNewLevel);
 
-    // GetOutputState returns the current output level of this gate
+    /**
+     * return current output level of this logic element
+     * 
+     * @param aOutputIndex output number
+    */
     eLogicLevel GetOutputState(int aOutputIndex);
 
+    /**
+     * return number of inputs of this logic element
+     * 
+     * @return number of inputs
+    */
     int InputSize();
 
+    /**
+     * return number of outputs of this logic element
+     * 
+     * @return number of outputs
+    */
     int OutputSize();
 
   protected:
-    // ComputeOutput is a virtual function implemented by subclasses depending on their logic.
-    // Used to populate output values and drive output wires.
+
+    /**
+     * Pure virtual function
+     * 
+     * For computing the output levels of Clogic objects
+    */
     virtual void ComputeOutput() = 0;
 
     std::vector<eLogicLevel> mInputs;            // Input levels

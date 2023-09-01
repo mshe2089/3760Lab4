@@ -1,18 +1,18 @@
 #ifndef _CWIRE_H
 #define _CWIRE_H
 
-//---Forward Declaration
+//--Forward Declaration
 class CLogic;
 
 //--Consts and enums-----------------------------------------------------------
 enum eLogicLevel // enum defining the possible states of a logic line
 {
     LOGIC_UNDEFINED = -1,
-    LOGIC_LOW,
-    LOGIC_HIGH
+    LOGIC_LOW = 0,
+    LOGIC_HIGH = 1
 };
 
-//---CWire Interface-----------------------------------------------------------
+//---CWire Declaration-----------------------------------------------------------
 // CWire is used to connect devices in this simulation
 // A CWire has a single input, and may drive multiple outputs
 // The global variable MaxFanout controls how many outputs each wire can have
@@ -21,21 +21,28 @@ enum eLogicLevel // enum defining the possible states of a logic line
 class CWire
 {
   public:
-    // Constructor
+    /**
+     * Constructor
+    */
     CWire();
 
-    // AddOutputConnection adds to the list of outputs that this wire drives
-    // It accepts as parameters the nand gate whose input should be driven
-    // and the index specifying which of that gate's inputs should be driven.
+    /**
+     * Adds to the list of outputs that this wire drives
+     * 
+     * @param apGateToDrive gate to drive
+     * @param aGateInputToDrive input of gate to drive
+    */
     void AddOutputConnection(CLogic *apGateToDrive, int aGateInputToDrive);
 
-    // DriveLevel drives the wire's value, so that each of its connected outputs
-    // get set to the corresponding level
+    /**
+     * Drives the wire's value, so that each of its connected outputs
+     * 
+     * @param aNewLevel levels to drive this wire with
+    */
     void DriveLevel(eLogicLevel aNewLevel);
 
   private:
-    static const int MaxFanout = 2;     // maximum fanout: max gate inputs that one gate output can drive 
-
+    static const int MaxFanout = 2;     // max gate inputs that one gate output can drive 
     int mNumOutputConnections;            // how many outputs are connected
     CLogic *mpGatesToDrive[MaxFanout];    // list of connected gates
     int mGateInputIndices[MaxFanout];     // list of input to drive in each gate

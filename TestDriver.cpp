@@ -1,3 +1,6 @@
+// See TestDriver.h
+//
+//--Includes-------------------------------------------------------------------
 #include "TestDriver.h"
 #include "CANDGate.h"
 #include "CORGate.h"
@@ -5,13 +8,14 @@
 #include "CNOTGate.h"
 #include "CCircuit.h"
 
-#include <utility>        // std::pair
+#include <utility>
 #include <vector>
 #include <iostream>
 #include <string>
 #include <bitset>
 #include <cmath>
 
+//--TestDriver Implementation-------------------------------------------------------------------
 std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
     
     std::string CircuitName = "Unknown circuit";
@@ -37,7 +41,7 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
             std::cin >> GateType;
             std::cin >> GateName;
             std::cout << "Adding gate of type " << GateType << " named " << GateName << std::endl;
-            // TODO : add the gate
+            // Allocate new gate of specified type
             CLogic* Gate;
             if (GateType.compare( "or" ) == 0)
             {
@@ -64,7 +68,7 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
                 getline( std::cin, DummyVar );
                 continue;
             }
-
+            // Add new gate to circuit
             Circuit->AddLogic(GateName, Gate);
         }
 
@@ -78,6 +82,7 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
             std::cin >> Input;
             std::cin >> GateName;
             
+            // Add new wire to circuit, and connect it
             Circuit->AddWire(WireName);
             Circuit->ConnectWireToLogic(WireName, GateName, stoi(Input));
         }
@@ -92,6 +97,7 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
             std::cin >> Output;
             std::cin >> WireName;
         
+            // Connect specified output of named gate to named wire
             Circuit->ConnectLogicToWire(GateName, stoi(Output), WireName);
         }
 
@@ -103,6 +109,7 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
             std::cin >> GateName;
             std::cin >> Output;
         
+            // Set specified output of named gate as output
             Circuit->MapOutput(GateName, stoi(Output));
         }
 
@@ -111,13 +118,15 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
             std::string WireName;
             std::cin >> WireName;
         
+            // Set named wire as input
             Circuit->MapInput(WireName);
         }
         
         else if( Request.compare( "end" ) == 0 )
         {
+            // Save circuit name and stop reading file
             std::cin >> CircuitName;
-            break; // end of file
+            break;
         }
 
         else
@@ -130,23 +139,28 @@ std::pair<std::string, CLogic*> TestDriver::NewCircuit () {
         }
     }
 
+    // Return circuit name and pointer
     return std::make_pair(CircuitName, Circuit);
 }
 
-void TestDriver::TestCircuit2 (std::pair<std::string, CLogic*> CircuitInfo)
+void TestDriver::TestCircuit (std::pair<std::string, CLogic*> &CircuitInfo, std::string &Input, int i)
 {
-    for (int i = 0; i < pow(2, 2); i++)
+    if (i >= CircuitInfo.second->InputSize())
     {
-        TestInput(CircuitInfo.first, CircuitInfo.second, std::bitset<2>(i).to_string());
+        TestInput(CircuitInfo.first, CircuitInfo.second, Input);
     }
-}
+    else 
+    {
+        // Recursion
+        Input.push_back('0');
+        TestCircuit(CircuitInfo, Input, i+1);
+        Input.pop_back();
 
-void TestDriver::TestCircuit3 (std::pair<std::string, CLogic*> CircuitInfo)
-{
-    for (int i = 0; i < pow(2, 3); i++)
-    {
-        TestInput(CircuitInfo.first, CircuitInfo.second, std::bitset<3>(i).to_string());
+        Input.push_back('1');
+        TestCircuit(CircuitInfo, Input, i+1);
+        Input.pop_back();
     }
+    return;
 }
 
 void TestDriver::TestInput (std::string Name, CLogic* Circuit, std::string Input){
@@ -154,11 +168,13 @@ void TestDriver::TestInput (std::string Name, CLogic* Circuit, std::string Input
     std::string Output;
     const std::size_t InputWidth = Circuit->InputSize();
     const std::size_t OutputWidth = Circuit->OutputSize();
-        
+
+    // Drive each input with corressponding assignment
     for (int j = 0; j < int(InputWidth); j++){
         Circuit->DriveInput(j, (Input[j] == '1') ? LOGIC_HIGH : LOGIC_LOW);
     }
 
+    // Get all outputs and print 
     Output = "";
     for (int j = 0; j < int(OutputWidth); j++){
         if (Circuit->GetOutputState(j) == LOGIC_HIGH) 
@@ -179,4 +195,6 @@ void TestDriver::TestInput (std::string Name, CLogic* Circuit, std::string Input
                 << " >>> "
                 << " Output: " << Output
                 << std::endl;
+
+    return;
 }

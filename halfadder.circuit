@@ -4,16 +4,18 @@
  component and myAnd0
 
  wire inWireA 0 myXor0
+ wire inWireA 0 myAnd0
  wire inWireB 1 myXor0 
- wire inWireC 1 myAnd0
- wire inWireD 0 myAnd0
+ wire inWireB 1 myAnd0
 
- connect myXor0 0 inWireD
-
+ # Cout
  testerOutput myAnd0 0
+ # S
+ testerOutput myXor0 0
 
+ # A
  testerInput inWireA
+ # B
  testerInput inWireB
- testerInput inWireC
 
  end HalfAdder
